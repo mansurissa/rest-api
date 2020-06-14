@@ -1,0 +1,25 @@
+{
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "learning node (creating a rest-api)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mansurissa/rest-api.git"
+  },
+  "keywords": [
+    "node",
+    "rest-pi",
+    "api"
+  ],
+  "author": "Issa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mansurissa/rest-api/issues"
+  },
+  "homepage": "https://github.com/mansurissa/rest-api#readme"
+}
