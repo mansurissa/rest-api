@@ -2,8 +2,13 @@ const express = require('express');
 const orders = express.Router();
 
 orders.post('/', (req, res, next) => {
+    const order = {
+        item: req.body.itemId,
+        quantity: req.body.quantity
+    }
     res.json({
-        message: 'order sent'
+        message: 'order sent',
+        placedOrder: order
     })
 });
 
