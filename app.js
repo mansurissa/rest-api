@@ -14,6 +14,7 @@ const ordersRouter = require('./api/routes/orders');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors())
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
