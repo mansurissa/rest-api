@@ -8,8 +8,14 @@ products.get('/', (req, res, next) => {
 });
 
 products.post('/', (req, res, next) => {
+    const products = {
+        name: req.body.name,
+        price: req.body.price,
+        quantinty: req.body.quantity
+    }
     res.status(200).json({
-        message: "handled /product route post"
+        message: "handled /product route post",
+        createdProduct: products
     })
 });
 
