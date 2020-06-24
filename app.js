@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 
+//packages importing
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+//importing local stuffs
 const productRouter = require('./api/routes/products');
 const ordersRouter = require('./api/routes/orders');
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
