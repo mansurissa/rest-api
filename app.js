@@ -5,16 +5,25 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose')
+const dotenv = require('dotenv');
+
 
 //importing local stuffs
 const productRouter = require('./api/routes/products');
 const ordersRouter = require('./api/routes/orders');
-
+dotenv.config();
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
+
+console.log(process.env.MONGO_URL)
+//mongoose
+mongoose.connect(process.env.MONGO_URL).then(
+    console.log('hacker arankopeje')
+)
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
