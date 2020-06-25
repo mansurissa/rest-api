@@ -5,9 +5,19 @@ const mongoose = require('mongoose');
 const Product = require('../models/productModel');
 
 products.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: "handled /product route get"
-    })
+    Product.find()
+        .exec()
+        .then(resultGET => {
+            console.log(resultGET)
+            res.status(200).json(resultGET)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                message: "Not Found"
+            })
+        })
+
 });
 
 products.post('/', (req, res, next) => {
@@ -28,7 +38,6 @@ products.post('/', (req, res, next) => {
                         message: "failed to post a product"
                     })
                 })
-
         });
 });
 
