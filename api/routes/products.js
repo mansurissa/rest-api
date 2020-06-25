@@ -16,6 +16,11 @@ products.post('/', (req, res, next) => {
         name: req.body.name,
         price: req.body.price
     })
+    product.save()
+        .then(result => {
+            console.log(result)
+        })
+        .catch(err => console.log(err))
     res.status(200).json({
         message: "handled /product route post",
         createdProduct: product
