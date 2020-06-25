@@ -18,29 +18,35 @@ products.post('/', (req, res, next) => {
     })
     product.save()
         .then(result => {
-            console.log(result)
-        })
-        .catch(err => console.log(err))
-    res.status(200).json({
-        message: "handled /product route post",
-        createdProduct: product
-    })
+            res.status(200).json({
+                message: "your product sent sucessful",
+                createdProduct: result
+            })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        message: "failed to post a product"
+                    })
+                })
+
+        });
 });
 
 products.get('/:productId', (req, res, next) => {
     const id = req.params.productId;
-    if (id === "123") {
-        res.status(200).json({
-            message: "handled /productId route with success"
+    Product.findById(id)
+        .exec()
+        .then(doc => {
+            console.log(doc);
+            res.status(200).json(doc)
         })
-    }
-    else {
-        res.status(400).json({
-            message: "you did it wrong",
-            id: id
-        })
-    }
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                message: "no such product"
+            })
 
+        })
 });
 products.patch('/', (req, res, next) => {
     res.status(200).json({
