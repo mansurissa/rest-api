@@ -21,9 +21,10 @@ app.use(cors());
 
 console.log(process.env.MONGO_URL)
 //mongoose
-mongoose.connect(process.env.MONGO_URL).then(
-    console.log('hacker arankopeje')
-)
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
