@@ -1,5 +1,8 @@
 const express = require('express');
 const products = express.Router();
+const mongoose = require('mongoose');
+
+const Product = require('../models/productModel');
 
 products.get('/', (req, res, next) => {
     res.status(200).json({
@@ -8,14 +11,14 @@ products.get('/', (req, res, next) => {
 });
 
 products.post('/', (req, res, next) => {
-    const products = {
+    const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price,
-        quantinty: req.body.quantity
-    }
+        price: req.body.price
+    })
     res.status(200).json({
         message: "handled /product route post",
-        createdProduct: products
+        createdProduct: product
     })
 });
 
