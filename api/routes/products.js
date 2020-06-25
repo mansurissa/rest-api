@@ -64,9 +64,21 @@ products.patch('/', (req, res, next) => {
 });
 
 products.delete('/', (req, res, next) => {
-    res.status(200).json({
-        message: "deleted products"
-    })
+    Product.remove({ _id: req.params.id })
+        .exec()
+        .then(result => {
+            console.log(result)
+            res.status(200).json({
+                message: "deleted product"
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                message: "failed to delete selected product"
+            })
+        })
+
 });
 
 
