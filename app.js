@@ -25,6 +25,7 @@ mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+mongoose.Promise = global.Promise
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);

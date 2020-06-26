@@ -18,7 +18,7 @@ products.get('/', (req, res, next) => {
                         _id: resultGET._id,
                         requestInfo: {
                             type: "GET",
-                            url: "http//localhost:3002/products/" + resultGET._id
+                            url: "http://localhost:3002/products/" + resultGET._id
                         }
                     })
                 })
