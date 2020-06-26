@@ -42,9 +42,17 @@ products.post('/', (req, res, next) => {
     })
     product.save()
         .then(result => {
+            const posted = {
+                name: result.name,
+                price: result.price,
+                _id: result._id,
+                request: {
+                    type: "GET",
+                    url: "http://localhost:3002/products/" + result._id
+                }
+            }
             res.status(200).json({
-                message: "your product sent sucessful",
-                createdProduct: result
+                createdProduct: posted
             })
                 .catch(err => {
                     console.log(err);
