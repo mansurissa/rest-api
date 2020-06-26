@@ -57,32 +57,40 @@ products.get('/:productId', (req, res, next) => {
 
         })
 });
-products.patch('/', (req, res, next) => {
-    res.status(200).json({
-        message: "updated products"
-    })
-});
-
-products.delete('/', (req, res, next) => {
-    Product.remove({ _id: req.params.id })
+products.patch('/:productId', (req, res, next) => {
+    const id = req.params.productId
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value
+    }
+    Product.update({ _id: id }, { updateOps })
         .exec()
         .then(result => {
-            console.log(result)
-            res.status(200).json({
-                message: "deleted product"
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            console.log(err)
+            res.json({
+                error: err
             })
+        })
+});
+
+products.delete('/:productId', (req, res, next) => {
+    const id = req.params.productId;
+    Product.remove({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json(result)
         })
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                message: "failed to delete selected product"
+                error: err
             })
         })
 
 });
-
-
-
 
 module.exports = products;
 
