@@ -46,11 +46,9 @@ products.get('/:productId', (req, res, next) => {
     Product.findById(id)
         .exec()
         .then(doc => {
-            console.log(doc);
             res.status(200).json(doc)
         })
         .catch(err => {
-            console.log(err);
             res.status(404).json({
                 message: "no such product"
             })
@@ -63,7 +61,7 @@ products.patch('/:productId', (req, res, next) => {
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value
     }
-    Product.update({ _id: id }, { updateOps })
+    Product.update({ _id: id }, { $set: updateOps })
         .exec()
         .then(result => {
             res.status(200).json(result)
