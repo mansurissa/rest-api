@@ -25,9 +25,16 @@ orders.post('/', (req, res, next) => {
 });
 
 orders.get('/', (req, res, next) => {
-    res.json({
-        message: 'order got'
-    })
+    Order.find()
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs)
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
 });
 
 orders.get('/:orderId', (req, res, next) => {
