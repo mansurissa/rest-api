@@ -63,6 +63,25 @@ orders.get('/', (req, res, next) => {
 });
 
 orders.get('/:orderId', (req, res, next) => {
+    Order.findById(req.params.orderId)
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                orderDetails: result,
+                request: {
+                    typpe: "GET",
+                    url: "http://localhost/orders" + result._id
+                }
+            })
+        })
+        .catch(err => {
+            res.status(404).json({
+                message: "no such order found"
+            })
+        })
+})
+
+orders.delete('/:orderId', (req, res, next) => {
     Order.remove({ _id: req.params.orderId })
         .exec()
         .then(result => {
@@ -75,12 +94,6 @@ orders.get('/:orderId', (req, res, next) => {
                 error: err
             })
         })
-})
-
-orders.delete('/', (req, res, next) => {
-    res.json({
-        message: 'order deleted'
-    })
 })
 
 module.exports = orders;
