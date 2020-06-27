@@ -28,7 +28,21 @@ orders.get('/', (req, res, next) => {
     Order.find()
         .exec()
         .then(docs => {
-            res.status(200).json(docs)
+            res.status(200).json({
+                count: docs.length,
+                orders: docs.map(docs => {
+                    return ({
+                        _id: docs._id,
+                        product: docs.product,
+                        quantity: docs.quantity,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3002/orders/" + docs._id
+                        }
+                    })
+                })
+
+            })
         })
         .catch(err => {
             res.status(500).json({
