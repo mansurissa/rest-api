@@ -33,8 +33,6 @@ orders.post('/', (req, res, next) => {
                 error: err
             })
         })
-
-
 });
 
 orders.get('/', (req, res, next) => {
@@ -65,9 +63,18 @@ orders.get('/', (req, res, next) => {
 });
 
 orders.get('/:orderId', (req, res, next) => {
-    res.json({
-        message: 'order details'
-    })
+    Order.remove({ _id: req.params.orderId })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: "order cancled"
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
 })
 
 orders.delete('/', (req, res, next) => {
