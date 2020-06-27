@@ -1,15 +1,27 @@
 const express = require('express');
 const orders = express.Router();
+const mongoose = require('mongoose');
+
+const Order = require('../models/ordersModel');
 
 orders.post('/', (req, res, next) => {
-    const order = {
-        item: req.body.itemId,
-        quantity: req.body.quantity
-    }
-    res.json({
-        message: 'order sent',
-        placedOrder: order
-    })
+    const order = new Order({
+        _id: mongoose.Types.ObjectId(),
+        quantity: req.body.quantity,
+        product: req.body.ObjectId
+    });
+    order
+        .save()
+        .then(result => {
+            res.json(result)
+        }
+        )
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
+
 });
 
 orders.get('/', (req, res, next) => {

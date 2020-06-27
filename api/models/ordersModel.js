@@ -6,4 +6,4 @@ const orderSchema = mongoose.Schema({
     quantity: { type: Number, required: true }
 })
 
-module.exports = mongoose.model('Order', productSchema)
+module.exports = mongoose.model('Order', orderSchema)
