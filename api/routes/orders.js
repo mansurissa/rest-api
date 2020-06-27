@@ -17,7 +17,7 @@ orders.post('/', (req, res, next) => {
                 const order = new Order({
                     _id: mongoose.Types.ObjectId(),
                     quantity: req.body.quantity,
-                    product: req.body.ObjectId
+                    product: req.body.productId
                 });
                 order
                     .save()
@@ -25,15 +25,14 @@ orders.post('/', (req, res, next) => {
                         res.json(result)
                     }
                     )
-                    .catch(err => {
-                        res.status(500).json({
-                            error: err
-                        })
-                    })
             }
         }
-
         )
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
 
 
 });
