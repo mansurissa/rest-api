@@ -7,7 +7,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose')
 const dotenv = require('dotenv');
-
+const fileUpload = require('express-fileupload')
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+}));
 
 //importing local stuffs
 const productRouter = require('./api/routes/products');
@@ -19,7 +22,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-console.log(process.env.MONGO_URL)
 //mongoose
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -39,12 +41,13 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    });
+    console.log("kano gashenzi sha", error)
+    res.status(500)
+        .json({
+            error: {
+                message: "naha kari sha"
+            }
+        });
 });
 
 module.exports = app;
