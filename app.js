@@ -45,7 +45,7 @@ app.use((error, req, res, next) => {
     res.status(500)
         .json({
             error: {
-                message: "naha kari sha"
+                message: "naha kari sha hacker arakanyeretse"
             }
         });
 });
