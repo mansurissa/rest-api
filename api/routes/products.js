@@ -1,31 +1,21 @@
 const express = require('express');
 const products = express.Router();
 const mongoose = require('mongoose');
-const multer = require('multer');
+const path = require('path')
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, '.uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString() + req.file.originalname)
-    }
-});
-
-const fileFilter = function (req, file, cb) {
-    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/pdf') {
-        cb('null', true)
-    } else {
-        cb('null', false)
-    }
+const fileUpload = (req, res, next) => {
+    const image = req.files.productImage
+    // console.log(image)
+    const imageUrl = path.join(__dirname, '..', '..', `/uploads/${new Date().toISOString() + image.name}`)
+    image.mv(imageUrl, (err) => {
+        if (err) {
+            console.log(err)
+        };
+    })
+    req.productImage = imageUrl
+    next()
 }
 
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 2
-    }
-});
 
 const Product = require('../models/productModel');
 
@@ -53,6 +43,7 @@ products.get('/', (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
+
             res.status(404).json({
                 message: "Not Found"
             })
@@ -60,12 +51,13 @@ products.get('/', (req, res, next) => {
 
 });
 
-products.post('/', upload.single('productImage'), (req, res, next) => {
-    console.log(req.file)
+products.post('/', fileUpload, (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        productImage: req.productImage
+
     })
     product.save()
         .then(result => {
@@ -73,21 +65,23 @@ products.post('/', upload.single('productImage'), (req, res, next) => {
                 name: result.name,
                 price: result.price,
                 _id: result._id,
+                productImage: result.productImage,
                 request: {
                     type: "GET",
                     url: "http://localhost:3002/products/" + result._id
                 }
             }
-            res.status(200).json({
+            res.status(201).json({
                 createdProduct: posted
             })
-                .catch(err => {
-                    console.log(err);
-                    res.status(500).json({
-                        message: "failed to post a product"
-                    })
-                })
-        });
+
+        })
+        .catch(err => {
+            console.log("nahano karahari");
+            res.status(500).json({
+                message: "failed to post a product"
+            })
+        })
 });
 
 products.get('/:productId', (req, res, next) => {
