@@ -1,6 +1,8 @@
 const express = require('express');
 const products = express.Router();
 const mongoose = require('mongoose');
+const multer = require('multer')
+const uploads = multer({ dest: 'uploads/' });
 
 const Product = require('../models/productModel');
 
@@ -34,7 +36,8 @@ products.get('/', (req, res, next) => {
 
 });
 
-products.post('/', (req, res, next) => {
+products.post('/', uploads.single('productImage'), (req, res, next) => {
+    console.log(req.file)
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
