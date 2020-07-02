@@ -5,12 +5,14 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const fileUpload = require('express-fileupload')
-app.use(fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-}));
+const fileUpload = require('express-fileupload');
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 }
+  })
+);
 
 //importing local stuffs
 const productRouter = require('./api/routes/products');
@@ -24,30 +26,29 @@ app.use(cors());
 
 //mongoose
 mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
 
-//error handling 
+//error handling
 
 app.use((req, res, next) => {
-    const error = new Error('Not Found');
-    error.status = 404;
-    next(error);
-})
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
+});
 
 app.use((error, req, res, next) => {
-    console.log("kano gashenzi sha", error)
-    res.status(500)
-        .json({
-            error: {
-                message: "naha kari sha hacker arakanyeretse"
-            }
-        });
+  console.log('kano gashenzi sha', error);
+  res.status(500).json({
+    error: {
+      message: 'naha kari sha hacker arakanyeretse'
+    }
+  });
 });
 
 module.exports = app;
