@@ -1,7 +1,7 @@
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const Product = require('../models/productModel');
+import express from 'express';
+import path from 'path';
+import mongoose from 'mongoose';
+import Product from '../models/productModel';
 
 const products = express.Router();
 const fileUpload = (req, res, next) => {
@@ -135,4 +135,4 @@ products.delete('/:productId', (req, res) => {
     });
 });
 
-module.exports = products;
+export default products;

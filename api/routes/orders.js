@@ -1,7 +1,7 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const Order = require('../models/ordersModel');
-const Product = require('../models/productModel');
+import express from 'express';
+import mongoose from 'mongoose';
+import Order from '../models/ordersModel';
+import Product from '../models/productModel';
 
 const orders = express.Router();
 orders.post('/', (req, res) => {
@@ -95,4 +95,4 @@ orders.delete('/:orderId', (req, res) => {
     });
 });
 
-module.exports = orders;
+export default orders;

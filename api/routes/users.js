@@ -1,7 +1,7 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-const Users = require('../models/userModel');
+import express from 'express';
+import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+import Users from '../models/userModel';
 
 const users = express.Router();
 
@@ -35,4 +35,4 @@ users.post('/signup', (req, res) => {
   });
 });
 
-module.exports = users;
+export default users;

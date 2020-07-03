@@ -1,13 +1,13 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const fileUpload = require('express-fileupload');
-const productRouter = require('./api/routes/products');
-const ordersRouter = require('./api/routes/orders');
-const usersRouter = require('./api/routes/users');
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import fileUpload from 'express-fileupload';
+import productRouter from './api/routes/products';
+import ordersRouter from './api/routes/orders';
+import usersRouter from './api/routes/users';
 
 const app = express();
 
@@ -54,4 +54,4 @@ app.use((error, req, res) => {
   });
 });
 
-module.exports = app;
+export default app;
