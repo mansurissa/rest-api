@@ -17,6 +17,7 @@ app.use(
 //importing local stuffs
 const productRouter = require('./api/routes/products');
 const ordersRouter = require('./api/routes/orders');
+const usersRouter = require('./api/routes/users')
 dotenv.config();
 
 app.use(morgan('dev'));
@@ -33,6 +34,7 @@ mongoose.Promise = global.Promise;
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
+app.use('/users', usersRouter)
 
 //error handling
 
