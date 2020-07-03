@@ -1,8 +1,9 @@
-const express = require('express');
-const products = express.Router();
-const mongoose = require('mongoose');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import mongoose from 'mongoose';
+import Product from '../models/productModel';
 
+const products = express.Router();
 const fileUpload = (req, res, next) => {
   const image = req.files.productImage;
   // console.log(image)
@@ -21,24 +22,22 @@ const fileUpload = (req, res, next) => {
   next();
 };
 
-const Product = require('../models/productModel');
-
-products.get('/', (req, res, next) => {
+products.get('/', (req, res) => {
   Product.find()
     .select('name price _id productImage')
     .exec()
     .then((resultGET) => {
       const response = {
         count: resultGET.length,
-        products: resultGET.map((resultGET) => {
+        products: resultGET.map((result) => {
           return {
-            name: resultGET.name,
-            price: resultGET.price,
-            productImage: resultGET.productImage,
-            _id: resultGET._id,
+            name: result.name,
+            price: result.price,
+            productImage: result.productImage,
+            _id: result._id,
             requestInfo: {
               type: 'GET',
-              url: 'http://localhost:3002/products/' + resultGET._id
+              url: `http://localhost:3002/products/${result._id}`
             }
           };
         })
@@ -54,7 +53,7 @@ products.get('/', (req, res, next) => {
     });
 });
 
-products.post('/', fileUpload, (req, res, next) => {
+products.post('/', fileUpload, (req, res) => {
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -71,22 +70,22 @@ products.post('/', fileUpload, (req, res, next) => {
         productImage: result.productImage,
         request: {
           type: 'GET',
-          url: 'http://localhost:3002/products/' + result._id
+          url: `http://localhost:3002/products/${result._id}`
         }
       };
       res.status(201).json({
         createdProduct: posted
       });
     })
-    .catch((err) => {
-      console.log('nahano karahari');
+    .catch((error) => {
+      console.log(error);
       res.status(500).json({
         message: 'failed to post a product'
       });
     });
 });
 
-products.get('/:productId', (req, res, next) => {
+products.get('/:productId', (req, res) => {
   const id = req.params.productId;
   Product.findById(id)
     .exec()
@@ -94,17 +93,20 @@ products.get('/:productId', (req, res, next) => {
       res.status(200).json(doc);
     })
     .catch((err) => {
+      console.log(err);
       res.status(404).json({
         message: 'no such product'
       });
     });
 });
-products.patch('/:productId', (req, res, next) => {
+products.patch('/:productId', (req, res) => {
   const id = req.params.productId;
   const updateOps = {};
-  for (const ops of req.body) {
+  req.body.map((ops) => {
     updateOps[ops.propName] = ops.value;
-  }
+    return true;
+  });
+
   Product.update({ _id: id }, { $set: updateOps })
     .exec()
     .then((result) => {
@@ -118,7 +120,7 @@ products.patch('/:productId', (req, res, next) => {
     });
 });
 
-products.delete('/:productId', (req, res, next) => {
+products.delete('/:productId', (req, res) => {
   const id = req.params.productId;
   Product.remove({ _id: id })
     .exec()
@@ -133,4 +135,4 @@ products.delete('/:productId', (req, res, next) => {
     });
 });
 
-module.exports = products;
+export default products;
