@@ -70,7 +70,10 @@ orders.get('/:orderId', (req, res, next) => {
           typpe: 'GET',
           url: 'http://localhost/orders' + result._id
         }
-      });
+      })
+
+
+
     })
     .catch((err) => {
       res.status(404).json({
