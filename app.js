@@ -1,17 +1,24 @@
-const express = require('express');
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import fileUpload from 'express-fileupload';
+import productRouter from './api/routes/products';
+import ordersRouter from './api/routes/orders';
+import usersRouter from './api/routes/users';
+
 const app = express();
 
-//packages importing
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose')
-const dotenv = require('dotenv');
+// packages importing
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 }
+  })
+);
 
-
-//importing local stuffs
-const productRouter = require('./api/routes/products');
-const ordersRouter = require('./api/routes/orders');
+// importing local stuffs
 dotenv.config();
 
 app.use(morgan('dev'));
@@ -19,32 +26,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-console.log(process.env.MONGO_URL)
-//mongoose
+// mongoose
 mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 
 app.use('/products', productRouter);
 app.use('/orders', ordersRouter);
+app.use('/users', usersRouter);
 
-//error handling 
+// error handling
 
 app.use((req, res, next) => {
-    const error = new Error('Not Found');
-    error.status = 404;
-    next(error);
-})
-
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    });
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
 });
 
-module.exports = app;
+app.use((error, req, res) => {
+  console.log('kano gashenzi sha', error);
+  res.status(500).json({
+    error: {
+      message: 'naha kari sha hacker arakanyeretse'
+    }
+  });
+});
+
+export default app;
