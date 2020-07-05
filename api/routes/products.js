@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import mongoose from 'mongoose';
 import Product from '../models/productModel';
+import checkAuth from '../middleware/check-auth';
 
 const products = express.Router();
 const fileUpload = (req, res, next) => {
@@ -53,7 +54,7 @@ products.get('/', (req, res) => {
     });
 });
 
-products.post('/', fileUpload, (req, res) => {
+products.post('/', checkAuth, fileUpload, (req, res) => {
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -99,7 +100,7 @@ products.get('/:productId', (req, res) => {
       });
     });
 });
-products.patch('/:productId', (req, res) => {
+products.patch('/:productId', checkAuth, (req, res) => {
   const id = req.params.productId;
   const updateOps = {};
   req.body.map((ops) => {
@@ -120,7 +121,7 @@ products.patch('/:productId', (req, res) => {
     });
 });
 
-products.delete('/:productId', (req, res) => {
+products.delete('/:productId', checkAuth, (req, res) => {
   const id = req.params.productId;
   Product.remove({ _id: id })
     .exec()
