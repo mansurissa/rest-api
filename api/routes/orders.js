@@ -2,9 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import Order from '../models/ordersModel';
 import Product from '../models/productModel';
+import checkAuth from '../middleware/check-auth';
 
 const orders = express.Router();
-orders.post('/', (req, res) => {
+orders.post('/', checkAuth, (req, res) => {
   Product.findById(req.body.productId)
     .exec()
     .then((product) => {
@@ -30,7 +31,7 @@ orders.post('/', (req, res) => {
     });
 });
 
-orders.get('/', (req, res) => {
+orders.get('/', checkAuth, (req, res) => {
   Order.find()
     .select('product quantity _id')
     .populate('product')
@@ -58,7 +59,7 @@ orders.get('/', (req, res) => {
     });
 });
 
-orders.get('/:orderId', (req, res) => {
+orders.get('/:orderId', checkAuth, (req, res) => {
   Order.findById(req.params.orderId)
     .populate('Product')
     .exec()
@@ -79,7 +80,7 @@ orders.get('/:orderId', (req, res) => {
     });
 });
 
-orders.delete('/:orderId', (req, res) => {
+orders.delete('/:orderId', checkAuth, (req, res) => {
   Order.remove({ _id: req.params.orderId })
     .exec()
     .then((result) => {
